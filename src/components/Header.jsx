@@ -60,7 +60,8 @@ export class Header extends Component {
         },
       ],
       search: "",
-      searchedContact: [],
+      filter: '',
+      filteredContact: [],
     };
   }
 
@@ -79,14 +80,14 @@ export class Header extends Component {
     ];
     this.setState({
       contacts: newContact,
-      searchedContact: newContact
+      filteredContact: newContact
     });
   };
   handleSearch = (e) => {
     let text = e.target.value.toLowerCase();
     this.setState({ search: text });
     this.setState({
-      searchedContact: this.state.contacts.filter(
+      filteredContact: this.state.contacts.filter(
         (e) =>
           e.firstName.toLowerCase().includes(text) ||
           e.lastName.toLowerCase().includes(text)
@@ -95,24 +96,38 @@ export class Header extends Component {
   };
   handleDelete = (id) => {
     this.setState({
-      searchedContact: this.state.contacts.filter((contact) => contact.id !== id)
+      filteredContact: this.state.contacts.filter((contact) => contact.id !== id)
     })
   };
+  handleFilter = (e) => {
+    const gender = e.target.value;
+    this.setState({filter: gender});
+    let filtered;
+    if (gender == 'All') {
+      filtered = this.state.contacts
+    } else {
+      filtered = this.state.contacts.filter(contact=>contact.gender==gender)
+    }
+    this.setState({
+      filteredContact: filtered
+    })
+  }
 
   componentDidMount() {
     this.setState({
-      searchedContact: this.state.contacts,
+      filteredContact: this.state.contacts,
     });
   }
 
   render() {
-    const { addModal, searchedContact, search } = this.state;
+    const { addModal, filteredContact, search, filter } = this.state;
     const {
       addCloseModal,
       addOpenModal,
       addContact,
       handleSearch,
       handleDelete,
+      handleFilter
     } = this;
     return (
       <div className="container">
@@ -125,7 +140,8 @@ export class Header extends Component {
             value={search}
             onChange={handleSearch}
           />
-          <select id="group" className="form-select w-auto">
+          <select id="group" className="form-select w-auto" value={filter} onChange={handleFilter}>
+            <option value="All">All</option>
             <option value="Male">Male</option>
             <option value="Female">Female</option>
           </select>
@@ -141,7 +157,7 @@ export class Header extends Component {
           addModal={addModal}
           addContact={addContact}
         />
-        <ContactList contacts={searchedContact} handleDelete={handleDelete} />
+        <ContactList contacts={filteredContact} handleDelete={handleDelete} />
       </div>
     );
   }
