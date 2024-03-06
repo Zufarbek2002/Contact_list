@@ -60,7 +60,7 @@ export class Header extends Component {
         },
       ],
       search: "",
-      filter: '',
+      filter: "",
       filteredContact: [],
     };
   }
@@ -80,7 +80,7 @@ export class Header extends Component {
     ];
     this.setState({
       contacts: newContact,
-      filteredContact: newContact
+      filteredContact: newContact,
     });
   };
   handleSearch = (e) => {
@@ -96,22 +96,26 @@ export class Header extends Component {
   };
   handleDelete = (id) => {
     this.setState({
-      filteredContact: this.state.contacts.filter((contact) => contact.id !== id)
-    })
+      filteredContact: this.state.filteredContact.filter(
+        (contact) => contact.id !== id
+      ),
+    });
   };
   handleFilter = (e) => {
     const gender = e.target.value;
-    this.setState({filter: gender});
+    this.setState({ filter: gender });
     let filtered;
-    if (gender == 'All') {
-      filtered = this.state.contacts
+    if (gender == "All") {
+      filtered = this.state.contacts;
     } else {
-      filtered = this.state.contacts.filter(contact=>contact.gender==gender)
+      filtered = this.state.contacts.filter(
+        (contact) => contact.gender == gender
+      );
     }
     this.setState({
-      filteredContact: filtered
-    })
-  }
+      filteredContact: filtered,
+    });
+  };
 
   componentDidMount() {
     this.setState({
@@ -127,7 +131,7 @@ export class Header extends Component {
       addContact,
       handleSearch,
       handleDelete,
-      handleFilter
+      handleFilter,
     } = this;
     return (
       <div className="container">
@@ -140,7 +144,12 @@ export class Header extends Component {
             value={search}
             onChange={handleSearch}
           />
-          <select id="group" className="form-select w-auto" value={filter} onChange={handleFilter}>
+          <select
+            id="group"
+            className="form-select w-auto"
+            value={filter}
+            onChange={handleFilter}
+          >
             <option value="All">All</option>
             <option value="Male">Male</option>
             <option value="Female">Female</option>
